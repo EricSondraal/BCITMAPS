@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Eric Sondraal's Demo</title>
+		<!--Include Firebase related things -->
+		<!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+		<script src="https://www.gstatic.com/firebasejs/7.2.2/firebase-app.js"></script>
+
+		<!-- Add Firebase products that you want to use -->
+		<script src="https://www.gstatic.com/firebasejs/7.2.2/firebase-auth.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/7.2.2/firebase-firestore.js"></script>
+		<script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
+		<link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css" />
+        
+        <link href="json/jquery-ui.css" rel="stylesheet">
+        <!--<script type="text/javascript" src="jquery-3.4.1.min.js"></script>-->
+        <script src="json/external/jquery/jquery.js"></script>
+        <script src="json/jquery-ui.js"></script>
+        
+        <link rel="stylesheet" href="indexstyles.css">
+
+		<script>
+		  // Your web app's Firebase configuration
+		  var firebaseConfig = {
+			apiKey: "AIzaSyCpjvd1ZUJyO0MU1nhD39w9AWF2b8UtemY",
+			authDomain: "oct31-c298a.firebaseapp.com",
+			databaseURL: "https://oct31-c298a.firebaseio.com",
+			projectId: "oct31-c298a",
+			storageBucket: "oct31-c298a.appspot.com",
+			messagingSenderId: "635372216945",
+			appId: "1:635372216945:web:caad77434c91d0c9de31d0"
+		  };
+		  // Initialize Firebase
+		  firebase.initializeApp(firebaseConfig);
+		</script>
+	</head>
+	<body>
+        <div class="closeLogin" style="width: 360px; height: 640px; background-color: coral">
+
+            
+            
+            <div id="topBar">
+                <div id="mapposition">
+                    Map Position:<br>x 0.00<br>y 0.00
+                </div>
+                    <button onclick="ZoomIn()" id="zoominbutton">+</button>
+                    <button onclick="ZoomOut()" id="zoomoutbutton">-</button>
+                
+                <div class="dropdown">
+                    <button onclick="myFunction()" class="droploginbtn">Login</button>
+                    <div id="myDropdown" class="dropdown-content">
+                        <a href="#logindropper">
+                            <div id="firebaseui-auth-container"></div>
+                            <div id="loader">Loading...</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="closeLogin" id="map-container">
+                <img id="drag-image" src="http://www.vgmaps.com/NewsArchives/April2005/LegendOfZelda-Link%27sAwakeningAdvance-Koholint.png" />
+            </div>
+            
+            
+        </div>
+
+        
+
+
+        
+        
+        
+        
+        
+        
+        
+        <script>
+            
+            ///////////////////////////////////////////////////////////////////////////////
+            //DRAGGING AROUND THE IMAGE
+            ///////////////////////////////////////////////////////////////////////////////
+            $("#drag-image").css({ top: 0 + 'px', left: 0 + 'px' });
+            var _DRAGGGING_STARTED = 0;
+            var _LAST_MOUSEMOVE_POSITION = { x: null, y: null };
+            var _DIV_OFFSET = $('#map-container').offset();
+            var _CONTAINER_WIDTH = $("#map-container").outerWidth();
+            var _CONTAINER_HEIGHT = $("#map-container").outerHeight();
+            var _IMAGE_WIDTH;
+            var _IMAGE_HEIGHT;
+            var _IMAGE_LOADED = 0;
+            var zoomFactor = 1;
+            var zoomPerTimer = 2;
+            var mapStartingWidth;
+            var mapStartingHeight;
+
+            // Check whether image is cached or wait for the image to load 
+            // This is necessary before calculating width and height of the image
+            if($('#drag-image').get(0).complete) {
+                ImageLoaded();
+            }
+            else {
+                $('#drag-image').on('load', function() {
+                    ImageLoaded();
+                });
+            }
+
+            // Image is loaded
+            function ImageLoaded() {
+                _IMAGE_WIDTH = $("#drag-image").width();
+                _IMAGE_HEIGHT = $("#drag-image").height();
+                mapStartingWidth = _IMAGE_WIDTH;
+                mapStartingHeight = _IMAGE_HEIGHT;
+                _IMAGE_LOADED = 1;
+            }
+
+            $('#map-container').on('mousedown', function(event) {
+                /* Image should be loaded before it can be dragged */
+                if(_IMAGE_LOADED == 1) { 
+                    _DRAGGGING_STARTED = 1;
+
+                    /* Save mouse position */
+                    _LAST_MOUSE_POSITION = { x: event.pageX - _DIV_OFFSET.left, y: event.pageY - _DIV_OFFSET.top };
+                }
+            });
+
+            $('#map-container').on('mouseup', function() {
+                _DRAGGGING_STARTED = 0;
+            });
+
+            $('#map-container').on('mousemove', function(event) {
+                var current_mouse_position = { x: event.pageX - _DIV_OFFSET.left, y: event.pageY - _DIV_OFFSET.top };
+                var img_top = parseInt($("#drag-image").css('top'), 10);
+                var img_left = parseInt($("#drag-image").css('left'), 10);
+                
+                if(_DRAGGGING_STARTED == 1) {
+                    var change_x = current_mouse_position.x - _LAST_MOUSE_POSITION.x;
+                    var change_y = current_mouse_position.y - _LAST_MOUSE_POSITION.y;
+
+                    /* Save mouse position */
+                    _LAST_MOUSE_POSITION = current_mouse_position;
+
+                    var img_top_new = img_top + change_y;
+                    var img_left_new = img_left + change_x;
+
+                    /* Validate top and left do not fall outside the image, otherwise white space will be seen */
+                    if(img_top_new > 0)
+                        img_top_new = 0;
+                    if(img_top_new < (_CONTAINER_HEIGHT - _IMAGE_HEIGHT))
+                        img_top_new = _CONTAINER_HEIGHT - _IMAGE_HEIGHT;
+
+                    if(img_left_new > 0)
+                        img_left_new = 0;
+                    if(img_left_new < (_CONTAINER_WIDTH - _IMAGE_WIDTH))
+                        img_left_new = _CONTAINER_WIDTH - _IMAGE_WIDTH;
+
+                    $("#drag-image").css({ top: img_top_new + 'px', left: img_left_new + 'px' });
+                }
+                
+                /* Save mouse position */
+                _LAST_MOUSE_POSITION = current_mouse_position;
+                
+                var change_x = current_mouse_position.x - _LAST_MOUSE_POSITION.x;
+                var change_y = current_mouse_position.y - _LAST_MOUSE_POSITION.y;
+                
+                //calculate the mouse position on the map
+                var dragImageLeft = parseFloat(document.getElementById("drag-image").style.left);
+                var dragImageTop = parseFloat(document.getElementById("drag-image").style.top);
+                
+                var mousePosOnMap = { x: (current_mouse_position.x - dragImageLeft)/zoomFactor, y: (current_mouse_position.y - dragImageTop)/zoomFactor};
+                
+                //display the mouse pos on the map
+                $("#mapposition").html('Map Position:<br>x: ' + mousePosOnMap.x.toFixed(2) + '<br>y: ' + mousePosOnMap.y.toFixed(2));
+            });
+            
+            
+            ///////////////////////////////////////////////////////////////////////////////
+            //ZOOM IN
+            ///////////////////////////////////////////////////////////////////////////////
+            function ZoomIn() {
+                //limmit the max zoom in amount
+                if(zoomFactor * 2 <= 16) {
+                    var preWidth = document.getElementById("drag-image").clientWidth;
+                    var preHeight = document.getElementById("drag-image").clientHeight;
+
+                    zoomFactor *= 2;
+                    var postWidth = mapStartingWidth * zoomFactor;
+                    var postHeight = mapStartingHeight * zoomFactor;
+                    _IMAGE_WIDTH = postWidth;
+                    _IMAGE_HEIGHT = postHeight;
+                    document.getElementById("drag-image").style.width = postWidth + 'px';
+                    document.getElementById("drag-image").style.height = postHeight + 'px';
+
+                    var dragImageLeft = parseFloat(document.getElementById("drag-image").style.left);
+                    var dragImageTop = parseFloat(document.getElementById("drag-image").style.top);
+                    dragImageLeft *= 2;
+                    dragImageTop *= 2;
+                    dragImageLeft -= _CONTAINER_WIDTH / 2;
+                    dragImageTop -= _CONTAINER_HEIGHT / 2;
+                    $("#drag-image").css({ top: dragImageTop + 'px', left: dragImageLeft + 'px' });
+                }
+            }
+            
+
+            ///////////////////////////////////////////////////////////////////////////////
+            //ZOOM OUT
+            ///////////////////////////////////////////////////////////////////////////////
+            function ZoomOut() {
+                //limmit the max zoom out amount
+                if(zoomFactor / 2 >= 1) {
+                    var preWidth = document.getElementById("drag-image").clientWidth;
+                    var preHeight = document.getElementById("drag-image").clientHeight;
+
+                    zoomFactor /= 2;
+                    var postWidth = mapStartingWidth * zoomFactor;
+                    var postHeight = mapStartingHeight * zoomFactor;
+                    _IMAGE_WIDTH = postWidth;
+                    _IMAGE_HEIGHT = postHeight;
+                    document.getElementById("drag-image").style.width = postWidth + 'px';
+                    document.getElementById("drag-image").style.height = postHeight + 'px';
+
+                    var dragImageLeft = parseFloat(document.getElementById("drag-image").style.left);
+                    var dragImageTop = parseFloat(document.getElementById("drag-image").style.top);
+                    dragImageLeft += _CONTAINER_WIDTH / 2;
+                    dragImageTop += _CONTAINER_HEIGHT / 2;
+                    dragImageLeft /= 2;
+                    dragImageTop /= 2;
+                    
+                    /* Validate top and left do not fall outside the image, otherwise white space will be seen */
+                    if(dragImageTop > 0)
+                        dragImageTop = 0;
+                    if(dragImageTop < (_CONTAINER_HEIGHT - _IMAGE_HEIGHT))
+                        dragImageTop = _CONTAINER_HEIGHT - _IMAGE_HEIGHT;
+
+                    if(dragImageLeft > 0)
+                        dragImageLeft = 0;
+                    if(dragImageLeft < (_CONTAINER_WIDTH - _IMAGE_WIDTH))
+                        dragImageLeft = _CONTAINER_WIDTH - _IMAGE_WIDTH;
+                    
+                    $("#drag-image").css({ top: dragImageTop + 'px', left: dragImageLeft + 'px' });
+                }
+            }
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            /* When the user clicks on the button, 
+            toggle between hiding and showing the dropdown content */
+            function myFunction() {
+              document.getElementById("myDropdown").classList.toggle("show");
+            }
+
+            // Close the dropdown if the user clicks outside of it
+            window.onclick = function(event) {
+                //only close the drop down something is clicked away from it
+                if ((event.target.matches('.closeLogin'))&&(!event.target.matches('.droploginbtn')))
+                {
+                    var dropdowns = document.getElementsByClassName("dropdown-content");
+                    var i;
+                    for (i = 0; i < dropdowns.length; i++) {
+                        var openDropdown = dropdowns[i];
+                        if (openDropdown.classList.contains('show')) {
+                            openDropdown.classList.remove('show');
+                        }
+                    }
+                }
+            }
+           
+            
+
+
+        </script>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+		<script>
+			// Initialize the FirebaseUI Widget using Firebase.
+			var ui = new firebaseui.auth.AuthUI(firebase.auth());
+
+			var uiConfig = {
+			  callbacks: {
+				signInSuccessWithAuthResult: function(authResult, redirectUrl) {
+				  // User successfully signed in.
+				  // Return type determines whether we continue the redirect automatically
+				  // or whether we leave that to developer to handle.
+				  return true;
+				},
+				uiShown: function() {
+				  // The widget is rendered.
+				  // Hide the loader.
+				  document.getElementById('loader').style.display = 'none';
+				}
+			  },
+			  // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
+			  signInFlow: 'popup',
+			  signInSuccessUrl: 'main.html',
+			  signInOptions: [
+				// Leave the lines as is for the providers you want to offer your users.
+				//firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+				//firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+				//firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+				//firebase.auth.GithubAuthProvider.PROVIDER_ID,
+				firebase.auth.EmailAuthProvider.PROVIDER_ID,
+				//firebase.auth.PhoneAuthProvider.PROVIDER_ID
+			  ],
+			  // Terms of service url.
+			  tosUrl: 'main.html',
+			  // Privacy policy url.
+			  privacyPolicyUrl: 'main.html'
+			};
+
+			// The start method will wait until the DOM is loaded.
+			ui.start('#firebaseui-auth-container', uiConfig);
+
+		</script>
+
+
+	</body>
+
+
+</html>

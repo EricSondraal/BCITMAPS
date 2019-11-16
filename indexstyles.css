@@ -1,0 +1,78 @@
+.droploginbtn {
+    background-color: #3498DB;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+.droploginbtn:hover, .droploginbtn:focus {
+    background-color: #2980B9;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    float: right;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 360px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    right:0;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 0px 0px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown a:hover {
+    background-color: #ddd;
+}
+
+.show {
+    display: block;
+}
+
+
+
+
+#mapposition {
+    display: inline-block;
+    background-color:#dddddd;
+    width: 200px;
+    font-size: 10pt;
+}
+
+
+
+
+
+
+
+
+
+
+#map-container {
+	display: block;
+	height: 590px;
+	width: 360px;
+	overflow: hidden;
+	cursor: move;
+}
+
+#drag-image {
+	left: 0px;
+	pointer-events: none;
+	position: relative;
+	top: 0px;
+}
