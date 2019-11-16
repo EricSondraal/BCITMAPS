@@ -54,12 +54,24 @@
 }
 
 
+#phone {
+    float:left;
+    display:inline-block;
+}
 
 
 
 
 
 
+
+#debugDiv {
+    width: 1400px;
+    height: 640px;
+    background-color:#dddddd;
+    float:left;
+    display:inline-block;
+}
 
 
 #map-container {
@@ -68,6 +80,11 @@
 	width: 360px;
 	overflow: hidden;
 	cursor: move;
+    
+      -webkit-user-select: none; /* Safari 3.1+ */
+  -moz-user-select: none; /* Firefox 2+ */
+  -ms-user-select: none; /* IE 10+ */
+  user-select: none; /* Standard syntax */
 }
 
 #drag-image {

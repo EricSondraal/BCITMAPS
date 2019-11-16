@@ -2,7 +2,7 @@
 
 <html>
 	<head>
-		<title>Eric Sondraal's Demo</title>
+		<title>BCIT MAPS</title>
 		<!--Include Firebase related things -->
 		<!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
 		<script src="https://www.gstatic.com/firebasejs/7.2.2/firebase-app.js"></script>
@@ -17,6 +17,7 @@
         <!--<script type="text/javascript" src="jquery-3.4.1.min.js"></script>-->
         <script src="json/external/jquery/jquery.js"></script>
         <script src="json/jquery-ui.js"></script>
+        <script src="mask.js"></script>
         
         <link rel="stylesheet" href="indexstyles.css">
 
@@ -36,7 +37,7 @@
 		</script>
 	</head>
 	<body>
-        <div class="closeLogin" style="width: 360px; height: 640px; background-color: coral">
+        <div id="phone" class="closeLogin" style="width: 360px; height: 640px; background-color: coral">
 
             
             
@@ -59,13 +60,15 @@
             </div>
             
             <div class="closeLogin" id="map-container">
-                <img id="drag-image" src="http://www.vgmaps.com/NewsArchives/April2005/LegendOfZelda-Link%27sAwakeningAdvance-Koholint.png" />
+                <img id="drag-image" src="map.jpg" />
             </div>
             
             
         </div>
 
-        
+        <div id="debugDiv">
+            
+        </div>
 
 
         
@@ -207,7 +210,7 @@
             ///////////////////////////////////////////////////////////////////////////////
             function ZoomOut() {
                 //limmit the max zoom out amount
-                if(zoomFactor / 2 >= 1) {
+                if(zoomFactor / 2 >= 0.25) {
                     var preWidth = document.getElementById("drag-image").clientWidth;
                     var preHeight = document.getElementById("drag-image").clientHeight;
 
@@ -244,9 +247,10 @@
             
             
             
-            
-            
-            
+            //set the default zoom to 0.25
+            ZoomOut();
+            ZoomOut();
+
             
             
             
@@ -275,8 +279,7 @@
             }
            
             
-
-
+            
         </script>
         
         
@@ -284,6 +287,18 @@
         
         
         
+        
+        <script>
+        // Loop to display the elements of 2D array. 
+for (var i = 0; i < 64; i++) { 
+    for (var j = 0; j < 65; j++) 
+  
+    { 
+        document.getElementById("debugDiv").innerHTML+=mask[i][j];
+    } 
+    document.getElementById("debugDiv").innerHTML+="<br>";
+} 
+        </script>
         
         
         
