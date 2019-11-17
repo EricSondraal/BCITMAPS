@@ -61,6 +61,15 @@
 
 
 
+#myCanvas{
+    z-index: 100;
+    position: absolute;
+    left: 7px;
+    top: 57px;
+}
+
+
+
 
 
 

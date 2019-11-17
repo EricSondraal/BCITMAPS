@@ -60,9 +60,7 @@
             </div>
             
             <div class="closeLogin" id="map-container">
-                
                 <img id="drag-image" src="map.jpg" />
-                <canvas id="myCanvas" width="360" height="590" style="border:1px solid #000;"></canvas>
             </div>
             
             
@@ -81,21 +79,6 @@
         
         
         <script>
-            
-            
-            
-
-            
-
-
-
-
-
-            
-            
-            
-            
-            
             
             ///////////////////////////////////////////////////////////////////////////////
             //DRAGGING AROUND THE IMAGE
@@ -328,29 +311,17 @@
             //i = se16
             var solidWallCountX = 65 + 2;
             var solidWallCountY = 84 + 2;
-            var foundLocationX = -1;
-            var foundLocationY = -1;
-            var loopCounter=0;
-            var pathingArrayX = createArray(65,84);
-            var pathingArrayY = createArray(65,84);
             function FindPath(startX, startY, findBuilding) {
                 var iii;
                 var fff;
                 var xxx;
                 var yyy;
                 
-                foundLocationX = -1;
-                foundLocationY = -1;
-                
-                //convert the map position to the tile position
-                xxx = Math.floor(startX/39);
-                yyy = Math.floor(startY/39);
-                
                 var newLocations = createArray(65,84);
                 var canReachLocation = createArray(65,84);
-                //var insideSolidWallExists = createArray(65,84);
-                //var pathingArrayX = createArray(65,84);
-                //var pathingArrayY = createArray(65,84);
+                var insideSolidWallExists = createArray(65,84);
+                var pathingArrayX = createArray(65,84,65,84);
+                var pathingArrayY = createArray(65,84,65,84);
                 
                 
                 //reset all of them
@@ -360,8 +331,8 @@
                     {
                         newLocations[iii][fff] = false;
                         canReachLocation[iii][fff] = false;
-                        pathingArrayX[iii][fff] = -1;
-                        pathingArrayY[iii][fff] = -1;
+                        pathingArrayX[xxx][yyy][iii][fff] = -1;
+                        pathingArrayY[xxx][yyy][iii][fff] = -1;
                     }
                 }
 
@@ -370,14 +341,11 @@
                 canReachLocation[xxx][yyy] = true;
 
 
-                
                 //loop through all the possiable target locations
                 //set the default values
                 var foundNoNewLocations = false;
-                exitPathFindingLoop: {
                 while (!foundNoNewLocations)
                 {
-                    loopCounter += 1;
                     foundNoNewLocations = true;
                     //loop through all the locations to find all of the new spots
                     for (iii = 0; iii < solidWallCountX - 2; iii += 1)
@@ -387,64 +355,55 @@
                             //check for new locations
                             if (newLocations[iii][fff])
                             {
-                                //check if the building we are looking for has been found
-                                if(mask[iii][fff]==findBuilding)
-                                {
-                                    foundLocationX = iii;
-                                    foundLocationY = fff;
-                                    break exitPathFindingLoop;
-                                }
-                                
-                                
                                 //check for the left bound
                                 if (iii > 0)
                                 {
-                                    if ((mask[iii-1][fff]!='x') && (!canReachLocation[iii - 1][fff]))
+                                    if ((!insideSolidWallExists[iii-1][fff]) && (!canReachLocation[iii - 1][fff]))
                                     {
                                         canReachLocation[iii - 1][fff] = true;
                                         newLocations[iii - 1][fff] = true;
                                         foundNoNewLocations = false;
-                                        pathingArrayX[iii - 1][fff] = iii;
-                                        pathingArrayY[iii - 1][fff] = fff;
+                                        pathingArrayX[xxx][yyy][iii - 1][fff] = iii;
+                                        pathingArrayY[xxx][yyy][iii - 1][fff] = fff;
                                     }
                                 }
 
                                 //check for the top bound
                                 if (fff > 0)
                                 {
-                                    if ((mask[iii][fff-1]!='x') && (!canReachLocation[iii][fff - 1]))
+                                    if ((!insideSolidWallExists[iii][fff-1]) && (!canReachLocation[iii][fff - 1]))
                                     {
                                         canReachLocation[iii][fff - 1] = true;
                                         newLocations[iii][fff - 1] = true;
                                         foundNoNewLocations = false;
-                                        pathingArrayX[iii][fff-1] = iii;
-                                        pathingArrayY[iii][fff-1] = fff;
+                                        pathingArrayX[xxx][yyy][iii][fff-1] = iii;
+                                        pathingArrayY[xxx][yyy][iii][fff-1] = fff;
                                     }
                                 }
 
                                 //check for the right bound
                                 if (iii < solidWallCountX - 2 - 1)
                                 {
-                                    if ((mask[iii+1][fff]!='x') && (!canReachLocation[iii + 1][fff]))
+                                    if ((!insideSolidWallExists[iii+1][fff]) && (!canReachLocation[iii + 1][fff]))
                                     {
                                         canReachLocation[iii + 1][fff] = true;
                                         newLocations[iii + 1][fff] = true;
                                         foundNoNewLocations = false;
-                                        pathingArrayX[iii + 1][fff] = iii;
-                                        pathingArrayY[iii + 1][fff] = fff;
+                                        pathingArrayX[xxx][yyy][iii + 1][fff] = iii;
+                                        pathingArrayY[xxx][yyy][iii + 1][fff] = fff;
                                     }
                                 }
 
                                 //check for the bottom bound
                                 if (fff < solidWallCountY - 2 - 1)
                                 {
-                                    if ((mask[iii][fff+1]!='x') && (!canReachLocation[iii][fff + 1]))
+                                    if ((!insideSolidWallExists[iii][fff+1]) && (!canReachLocation[iii][fff + 1]))
                                     {
                                         canReachLocation[iii][fff + 1] = true;
                                         newLocations[iii][fff + 1] = true;
                                         foundNoNewLocations = false;
-                                        pathingArrayX[iii][fff+1] = iii;
-                                        pathingArrayY[iii][fff+1] = fff;
+                                        pathingArrayX[xxx][yyy][iii][fff+1] = iii;
+                                        pathingArrayY[xxx][yyy][iii][fff+1] = fff;
                                     }
                                 }
                                 //location has been dealt with
@@ -453,7 +412,6 @@
                         }
                     }
                 }
-                }
                 
             }
             
@@ -462,57 +420,7 @@
             
             
             
-            var drawCounter=0;
-            function DrawPathFindingUpdate(){
-                //get canvas info
-                var c = document.getElementById("myCanvas");
-                var ctx = c.getContext("2d");
-                var scaleAmount = 39*zoomFactor;
-                
-                //clear the canvas
-                ctx.clearRect(0, 0, ctx.width, ctx.height);
-                
-                
-                //starting location
-                ctx.beginPath();
-                var curDrawLocX = foundLocationX;
-                var curDrawLocY = foundLocationY;
-                ctx.moveTo(Math.round((curDrawLocY+0.5)*scaleAmount),Math.round((curDrawLocX+0.5)*scaleAmount));
-                
-                //loop until we reach the end
-                while(pathingArrayX[curDrawLocX][curDrawLocY]!=-1)
-                {
-                    drawCounter+=1;
-                    //draw a line to the current location
-                    ctx.lineTo( Math.round((curDrawLocY+0.5)*scaleAmount),Math.round((curDrawLocX+0.5)*scaleAmount));
-                    
-                    //step forward one time
-                    var newLocX=pathingArrayX[curDrawLocX][curDrawLocY];
-                    var newLocY=pathingArrayY[curDrawLocX][curDrawLocY];
-                    curDrawLocX=newLocX;
-                    curDrawLocY=newLocY;
-                }
-                
-                //done
-                ctx.stroke();
-                document.getElementById("debugDiv").innerHTML=pathingArrayX[curDrawLocX][curDrawLocY]+" "+pathingArrayY[curDrawLocX][curDrawLocY];
-                //document.getElementById("debugDiv").innerHTML=drawCounter;
-                //document.getElementById("debugDiv").innerHTML=pathingArrayX[2][3]+" "+pathingArrayY[2][3];
-            }
             
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            FindPath(1*39, 0*39, '1');
-            document.getElementById("debugDiv").innerHTML+="x: " + foundLocationX + "<br>";
-            document.getElementById("debugDiv").innerHTML+="y: " + foundLocationY + "<br>";
-            DrawPathFindingUpdate();
         </script>
         
         
@@ -533,9 +441,9 @@ for (var i = 0; i < 64; i++) {
     for (var j = 0; j < 65; j++) 
   
     { 
-        //document.getElementById("debugDiv").innerHTML+=mask[i][j];
+        document.getElementById("debugDiv").innerHTML+=mask[i][j];
     } 
-    //document.getElementById("debugDiv").innerHTML+="<br>";
+    document.getElementById("debugDiv").innerHTML+="<br>";
 } 
         </script>
         

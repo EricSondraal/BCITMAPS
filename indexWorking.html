@@ -467,7 +467,7 @@
                 //get canvas info
                 var c = document.getElementById("myCanvas");
                 var ctx = c.getContext("2d");
-                var scaleAmount = 39*zoomFactor;
+                var scaleAmount = 39/4;
                 
                 //clear the canvas
                 ctx.clearRect(0, 0, ctx.width, ctx.height);
@@ -477,14 +477,14 @@
                 ctx.beginPath();
                 var curDrawLocX = foundLocationX;
                 var curDrawLocY = foundLocationY;
-                ctx.moveTo(Math.round((curDrawLocY+0.5)*scaleAmount),Math.round((curDrawLocX+0.5)*scaleAmount));
+                ctx.moveTo(curDrawLocX*scaleAmount, curDrawLocY*scaleAmount);
                 
                 //loop until we reach the end
                 while(pathingArrayX[curDrawLocX][curDrawLocY]!=-1)
                 {
                     drawCounter+=1;
                     //draw a line to the current location
-                    ctx.lineTo( Math.round((curDrawLocY+0.5)*scaleAmount),Math.round((curDrawLocX+0.5)*scaleAmount));
+                    ctx.lineTo(curDrawLocX*scaleAmount, curDrawLocY*scaleAmount);
                     
                     //step forward one time
                     var newLocX=pathingArrayX[curDrawLocX][curDrawLocY];
@@ -509,7 +509,7 @@
             
             
             
-            FindPath(1*39, 0*39, '1');
+            FindPath(2*39, 2*39, '1');
             document.getElementById("debugDiv").innerHTML+="x: " + foundLocationX + "<br>";
             document.getElementById("debugDiv").innerHTML+="y: " + foundLocationY + "<br>";
             DrawPathFindingUpdate();
