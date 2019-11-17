@@ -191,6 +191,8 @@
                 
                 //display the mouse pos on the map
                 $("#mapposition").html('Map Position:<br>x: ' + mousePosOnMap.x.toFixed(2) + '<br>y: ' + mousePosOnMap.y.toFixed(2));
+                
+                DrawPathFindingUpdate();
             });
             
             
@@ -219,6 +221,7 @@
                     dragImageTop -= _CONTAINER_HEIGHT / 2;
                     $("#drag-image").css({ top: dragImageTop + 'px', left: dragImageLeft + 'px' });
                 }
+                DrawPathFindingUpdate();
             }
             
 
@@ -259,14 +262,13 @@
                     
                     $("#drag-image").css({ top: dragImageTop + 'px', left: dragImageLeft + 'px' });
                 }
+                DrawPathFindingUpdate();
             }
             
             
             
             
-            //set the default zoom to 0.25
-            ZoomOut();
-            ZoomOut();
+
 
             
             
@@ -469,22 +471,28 @@
                 var ctx = c.getContext("2d");
                 var scaleAmount = 39*zoomFactor;
                 
+                
+                //get the map offset
+                var drawOffsetX = parseFloat(document.getElementById("drag-image").style.left);
+                var drawOffsetY = parseFloat(document.getElementById("drag-image").style.top);
+                
+                
                 //clear the canvas
-                ctx.clearRect(0, 0, ctx.width, ctx.height);
+                ctx.clearRect(0, 0, c.width, c.height);
                 
                 
                 //starting location
                 ctx.beginPath();
                 var curDrawLocX = foundLocationX;
                 var curDrawLocY = foundLocationY;
-                ctx.moveTo(Math.round((curDrawLocY+0.5)*scaleAmount),Math.round((curDrawLocX+0.5)*scaleAmount));
+                ctx.moveTo(Math.round((curDrawLocY+0.5)*scaleAmount+drawOffsetX),Math.round((curDrawLocX+0.5)*scaleAmount+drawOffsetY));
                 
                 //loop until we reach the end
                 while(pathingArrayX[curDrawLocX][curDrawLocY]!=-1)
                 {
                     drawCounter+=1;
                     //draw a line to the current location
-                    ctx.lineTo( Math.round((curDrawLocY+0.5)*scaleAmount),Math.round((curDrawLocX+0.5)*scaleAmount));
+                    ctx.lineTo( Math.round((curDrawLocY+0.5)*scaleAmount+drawOffsetX),Math.round((curDrawLocX+0.5)*scaleAmount+drawOffsetY));
                     
                     //step forward one time
                     var newLocX=pathingArrayX[curDrawLocX][curDrawLocY];
@@ -509,10 +517,13 @@
             
             
             
-            FindPath(1*39, 0*39, '1');
+            FindPath(3*39, 40*39, '1');
             document.getElementById("debugDiv").innerHTML+="x: " + foundLocationX + "<br>";
             document.getElementById("debugDiv").innerHTML+="y: " + foundLocationY + "<br>";
             DrawPathFindingUpdate();
+            //set the default zoom to 0.25
+            ZoomOut();
+            ZoomOut();
         </script>
         
         
