@@ -64,9 +64,24 @@
 #myCanvas{
     z-index: 100;
     position: absolute;
-    left: 7px;
-    top: 57px;
+    left: 0px;
+    top: 61px;
 }
+
+
+
+.search-group{
+    position: absolute;
+    left: 140px;
+    z-index: 1000;
+}   
+.search-group-prepend{
+    position: absolute;
+    left: -115px;
+    z-index: 1000;
+}
+
+
 
 
 
