@@ -72,16 +72,20 @@
 
 .search-group{
     position: absolute;
-    left: 140px;
+    left: 100px;
     z-index: 1000;
 }   
 .search-group-prepend{
     position: absolute;
-    left: -115px;
+    left: -90px;
     z-index: 1000;
 }
 
-
+#search-button{
+    position: absolute;
+    left: 290px;
+    z-index: 1000;
+}
 
 
 

@@ -34,6 +34,7 @@
 		  };
 		  // Initialize Firebase
 		  firebase.initializeApp(firebaseConfig);
+            var db = firebase.firestore();
 		</script>
         
         
@@ -82,28 +83,23 @@
             
             
             
-                    <div class="search-group">
-                <div class="search-group-prepend">
-                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</button>
-                    <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
+            <div class="search-group">
+                    <div class="search-group-prepend">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">History</button>
+                        <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                    </div>
                 </div>
+                <input id="user-search-location" type="text" class="form-control" aria-label="Text input with dropdown button">
             </div>
-            <input type="text" class="form-control" aria-label="Text input with dropdown button">
-        </div>
+            <button id="search-button" type="button" class="btn btn-primary">&#62;</button>
+            
+            
             
             
             
             <div class="closeLogin" id="map-container">
-                
-                
-                
-                
-                
-                
-                
-                
                 <img id="drag-image" src="map.jpg" />
                 <canvas id="myCanvas" width="360" height="590" style="border:1px solid #000;"></canvas>
             </div>
@@ -130,10 +126,119 @@
 
             
 
+            //when the search button is clicked
+            $('#search-button').click(function(){
+                incSearchLocation($('#user-search-location').val());
+            })
 
+            
+            
+            //arrays to keep track of the users searches
+            var CURRENTsearchLocation = [];
+            var CURRENTsearchAmount = [];
+            
+            //update their searches
+            getSearchInformation();
+            
+            //getSearchInformation gets all of the user's search information off of the database
+            function getSearchInformation() {
+                db.collection("search_location") // add to this nesting if needed
+                .get()                  // getting a collection of documents
+                .then(function(snap){
+                    // console.log(snap); // collection of documents
+                    var iii=0;
+                    snap.forEach(function(doc){ // iterate thru collections
+                        // console.log(doc)
+                        CURRENTsearchLocation[iii] = doc.data().location;
+                        CURRENTsearchAmount[iii] = doc.data().amount;
+                        iii+=1;
+                     });
+                    //console.log(CURRENTsearchLocation);
+                    //console.log(CURRENTsearchAmount);
+                });
+            }
 
-
-
+            
+            //incSearchLocation increases the increases the times the user has searched a location on the database
+            //building is the string of the building's name
+            function incSearchLocation(building) {
+                var iii;
+                
+                
+                //loop through all of the user's searches
+                var loopFoundLocation=false;
+                for(iii=0; iii<CURRENTsearchLocation.length; iii+=1) {
+                    //check if they have searched this location before
+                    if(CURRENTsearchLocation[iii]==building){
+                        //if they have increase the search's frequency by 1
+                        var docData = {
+                            location: CURRENTsearchLocation[iii],
+                            amount: (CURRENTsearchAmount[iii]+1)
+                        };
+                        db.collection("search_location").doc(CURRENTsearchLocation[iii]).set(docData);
+                        
+                        loopFoundLocation=true;
+                    } 
+                }
+                
+                //the user has never searched this place before... keep track of it
+                if(!loopFoundLocation){
+                    var docData = {
+                        location: building,
+                        amount: (0)
+                    };
+                    db.collection("search_location").doc(building).set(docData);
+                }
+                
+                //update their searches
+                getSearchInformation();
+                sortSearchArrays();
+                printSearchArrays();
+            }
+            
+            
+            //sortSearchArrays sorts both of the search arrays
+            //the largest number goes to index 0
+            //the smallest number goes to the last index
+            function sortSearchArrays() {
+                var didChange=true;
+                //keep comparing them until they are in order
+                while(didChange){
+                    didChange=false;
+                    
+                    var iii;
+                    //loop from start to end
+                    for(iii=0;iii<CURRENTsearchLocation.length-1;iii+=1) {
+                        //compare the index's next to each other
+                        if(CURRENTsearchAmount[iii]<CURRENTsearchAmount[iii+1]){
+                            //wrong order: swap them
+                            let tempAmount = CURRENTsearchAmount[iii];
+                            let tempLocation = CURRENTsearchLocation[iii];
+                            
+                            CURRENTsearchAmount[iii]=CURRENTsearchAmount[iii+1];
+                            CURRENTsearchLocation[iii]=CURRENTsearchLocation[iii+1];
+                            CURRENTsearchAmount[iii+1]=tempAmount;
+                            CURRENTsearchLocation[iii+1]=tempLocation;
+                            didChange=true;
+                        }
+                    }
+                }
+            }
+            
+            //print out all of the users searches to the debug window
+            function printSearchArrays() {
+                var iii;
+                var writeString="";
+                //$('#debugDiv').html("");
+                //loop from start to end
+                
+                for(iii=0;iii<CURRENTsearchLocation.length;iii+=1) {
+                    //$('#debugDiv').html($('#debugDiv').html()+"Location: "+CURRENTsearchLocation[iii]+"<br>"+"Frequency:"+CURRENTsearchAmount[iii]+"<br>");
+                    writeString+="Location: "+CURRENTsearchLocation[iii]+"<br>"+"Frequency:"+CURRENTsearchAmount[iii]+"<br>";
+                }
+                $('#debugDiv').html(writeString);
+                
+            }
             
             
             
@@ -546,7 +651,7 @@
                 
                 //done
                 ctx.stroke();
-                document.getElementById("debugDiv").innerHTML=pathingArrayX[curDrawLocX][curDrawLocY]+" "+pathingArrayY[curDrawLocX][curDrawLocY];
+                //document.getElementById("debugDiv").innerHTML=pathingArrayX[curDrawLocX][curDrawLocY]+" "+pathingArrayY[curDrawLocX][curDrawLocY];
                 //document.getElementById("debugDiv").innerHTML=drawCounter;
                 //document.getElementById("debugDiv").innerHTML=pathingArrayX[2][3]+" "+pathingArrayY[2][3];
             }
@@ -561,8 +666,8 @@
             
             
             FindPath(3*39, 40*39, '1');
-            document.getElementById("debugDiv").innerHTML+="x: " + foundLocationX + "<br>";
-            document.getElementById("debugDiv").innerHTML+="y: " + foundLocationY + "<br>";
+            //document.getElementById("debugDiv").innerHTML+="x: " + foundLocationX + "<br>";
+            //document.getElementById("debugDiv").innerHTML+="y: " + foundLocationY + "<br>";
             DrawPathFindingUpdate();
             //set the default zoom to 0.25
             ZoomOut();
