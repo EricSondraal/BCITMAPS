@@ -56,10 +56,10 @@
         <div id="phone" class="closeLogin" style="width: 360px; height: 640px; background-color: #B6D06B">
 
             
-            <div id="topBar">
-                <div id="mapposition">
+            <!-- <div id="topBar"> -->
+                <!-- <div id="mapposition"> -->
                     <!-- Map Position:<br>x 0.00<br>y 0.00 -->
-                </div>
+                <!-- </div> -->
 
                
                 <input type="image" id ="zoominbutton" src="https://dummyimage.com/50x50/B6D06B/"
@@ -80,11 +80,11 @@
                         </a>
                     </div>
                 </div> -->
-            </div>
+            <!-- </div> -->
             
             
             
-            <div class="search-group">
+            <!-- <div class="search-group">
                     <div class="search-group-prepend">
                         <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">History</button>
                         <div class="dropdown-menu">
@@ -94,8 +94,23 @@
                 </div>
                 <input id="user-search-location" type="text" class="form-control" aria-label="Text input with dropdown button">
             </div>
-            <button id="search-button" type="button" class="btn btn-primary">&#62;</button>
+            <button id="search-button" type="button" class="btn btn-primary">&#62;</button> -->
             
+            <div class = "searchcontainer">
+
+                <div class = "searchcurrent">
+
+                    <input id = "currentlocation" type = "text" label = "Current Location">
+
+                </div>
+
+                <div class = "searchdestination">
+
+                    <input id = "currentdestination" type = "text" label = "Destination">
+
+                    </div>
+
+             </div>
             
             
             <div class="bottomfooter">
@@ -103,7 +118,7 @@
             
             <div class="closeLogin" id="map-container">
                 <img id="drag-image" src="map_ver2.jpg" />
-                <canvas id="myCanvas" width="360" height="590" style="border:1px solid #000;"></canvas>
+                <canvas id="myCanvas" width="360" height="640" style="border:1px solid #000;"></canvas>
             </div>
             
             

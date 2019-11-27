@@ -67,7 +67,7 @@
     z-index: 100;
     position: absolute;
     left: 0px;
-    top: 61px;
+    top: 0px;
 }
 
 
@@ -112,13 +112,27 @@
     position: absolute;
     z-index: 10000;
     left: 1px;
-    top: 612px;
+    top: 600px;
     background-color: #B6D06B;
-    opacity: 85%;
+    opacity: 80%;
     text-align: center;
     color: white;
     font-size: 18pt;
 }
+
+.searchcontainer{
+    background-color: white;
+    width: 300px;
+    border-radius: 15px;
+    position: absolute;
+    z-index: 10000;
+    left: 30px;
+    top: 30px;
+    text-align: center;
+    box-shadow:  2px 2px 5px 0px rgba(0,0,0,0.43);
+}
+
+
 
 #debugDiv {
     width: 1400px;
@@ -131,7 +145,7 @@
 
 #map-container {
 	display: block;
-	height: 590px;
+	height: 640px;
 	width: 360px;
 	overflow: hidden;
 	cursor: move;
