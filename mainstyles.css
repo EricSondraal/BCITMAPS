@@ -115,6 +115,9 @@
     top: 612px;
     background-color: #B6D06B;
     opacity: 85%;
+    text-align: center;
+    color: white;
+    font-size: 18pt;
 }
 
 #debugDiv {
