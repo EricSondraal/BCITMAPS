@@ -43,7 +43,9 @@
     display: block;
 }
 
-
+#topBar{
+    height: 61.5px;
+}
 
 
 #mapposition {
@@ -88,16 +90,38 @@
 }
 
 
+#zoominbutton {
+    outline: 0 none;
+    position: absolute;
+    z-index: 10000;
+    left: 305px;
+    top: 290px;
+  }
 
+#zoomoutbutton {
+    outline: 0 none;
+    position: absolute;
+    z-index: 10000;
+    left: 305px;
+    top: 350px;
+  }
 
-
-
+.bottomfooter {
+    width: 360px;
+    height: 40px;
+    position: absolute;
+    z-index: 10000;
+    left: 1px;
+    top: 612px;
+    background-color: #B6D06B;
+    opacity: 85%;
+}
 
 #debugDiv {
     width: 1400px;
     height: 640px;
     background-color:#dddddd;
-    float:left;
+    float: left;
     display:inline-block;
 }
 
