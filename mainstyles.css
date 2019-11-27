@@ -96,6 +96,7 @@
     z-index: 10000;
     left: 305px;
     top: 290px;
+    opacity: 60%;
   }
 
 #zoomoutbutton {
@@ -104,6 +105,7 @@
     z-index: 10000;
     left: 305px;
     top: 350px;
+    opacity: 60%;
   }
 
 .bottomfooter {
@@ -132,13 +134,33 @@
     box-shadow:  2px 2px 5px 0px rgba(0,0,0,0.43);
 }
 
+#searchform{
+    padding-left: 100px;
+    
+}
 
+#line{
+    width: 220px;
+    height: 2px;
+    background-color: #d3d3d3;
+    position: absolute;
+    left: 50px;
+    top:25px;
+}
+
+#searchicon {
+
+    float: left;
+    margin-left: 12px;
+    margin-top: 6px;
+
+}
 
 #debugDiv {
     width: 1400px;
     height: 640px;
     background-color:#dddddd;
-    float: left;
+    float:left;
     display:inline-block;
 }
 

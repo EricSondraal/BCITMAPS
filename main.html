@@ -62,10 +62,10 @@
                 <!-- </div> -->
 
                
-                <input type="image" id ="zoominbutton" src="https://dummyimage.com/50x50/B6D06B/"
+                <input type="image" id ="zoominbutton" src="https://dummyimage.com/50x50/B6D06B&text=&plus;/"
                 style="border-radius: 50%;" onclick="ZoomIn()">
 
-                <input type="image" id ="zoomoutbutton" src="https://dummyimage.com/50x50/B6D06B/" 
+                <input type="image" id ="zoomoutbutton" src="https://dummyimage.com/50x50/B6D06B&text=&#43;;" 
                 style="border-radius: 50%;" onclick="ZoomOut()">
 
                     <!-- <button onclick="ZoomIn()" id="zoominbutton">+</button> -->
@@ -98,15 +98,20 @@
             
             <div class = "searchcontainer">
 
-                <div class = "searchcurrent">
+                <img id = "searchicon" src="search_icons.JPG" width="12px">
 
-                    <input id = "currentlocation" type = "text" label = "Current Location">
+                <div class = "searchform">
+
+                    <input id = "currentlocation" type = "text" placeholder = "Current Location" style=" border: none">
 
                 </div>
 
-                <div class = "searchdestination">
+                <div id = "line">
+                </div>
 
-                    <input id = "currentdestination" type = "text" label = "Destination">
+                <div class = "searchform">
+
+                    <input id = "currentdestination" type = "text" placeholder = "Destination" style=" border: none">
 
                     </div>
 
