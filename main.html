@@ -56,21 +56,22 @@
         <div id="phone" class="closeLogin" style="width: 360px; height: 640px; background-color: coral">
 
             
-            
-            
-
-            
-            
-            
-            
             <div id="topBar">
                 <div id="mapposition">
-                    Map Position:<br>x 0.00<br>y 0.00
+                    <!-- Map Position:<br>x 0.00<br>y 0.00 -->
                 </div>
-                    <button onclick="ZoomIn()" id="zoominbutton">+</button>
-                    <button onclick="ZoomOut()" id="zoomoutbutton">-</button>
+
+               
+                <input type="image" id ="zoominbutton" src="https://dummyimage.com/50x50/B6D06B/"
+                style="border-radius: 50%;" onclick="ZoomIn()">
+
+                <input type="image" id ="zoomoutbutton" src="https://dummyimage.com/50x50/B6D06B/" 
+                style="border-radius: 50%;" onclick="ZoomOut()">
+
+                    <!-- <button onclick="ZoomIn()" id="zoominbutton">+</button> -->
+                    <!-- <button onclick="ZoomOut()" id="zoomoutbutton">-</button> -->
                 
-                <div class="dropdown">
+                <!-- <div class="dropdown">
                     <button onclick="myFunction()" class="droploginbtn">Login</button>
                     <div id="myDropdown" class="dropdown-content">
                         <a href="#logindropper">
@@ -78,7 +79,7 @@
                             <div id="loader">Loading...</div>
                         </a>
                     </div>
-                </div>
+                </div> -->
             </div>
             
             
@@ -97,10 +98,11 @@
             
             
             
-            
+            <div class="bottomfooter">
+            </div>
             
             <div class="closeLogin" id="map-container">
-                <img id="drag-image" src="map.jpg" />
+                <img id="drag-image" src="map_ver2.jpg" />
                 <canvas id="myCanvas" width="360" height="590" style="border:1px solid #000;"></canvas>
             </div>
             
@@ -338,8 +340,14 @@
                 var mousePosOnMap = { x: (current_mouse_position.x - dragImageLeft)/zoomFactor, y: (current_mouse_position.y - dragImageTop)/zoomFactor};
                 
                 //display the mouse pos on the map
-                $("#mapposition").html('Map Position:<br>x: ' + mousePosOnMap.x.toFixed(2) + '<br>y: ' + mousePosOnMap.y.toFixed(2));
+                // $("#mapposition").html('Map Position:<br>x: ' + mousePosOnMap.x.toFixed(2) + '<br>y: ' + mousePosOnMap.y.toFixed(2));
+               
+                var user = firebase.auth().currentUser;
                 
+                if( user != null){
+                    $("#mapposition").html(user.uid);
+                }
+
                 DrawPathFindingUpdate();
             });
             
