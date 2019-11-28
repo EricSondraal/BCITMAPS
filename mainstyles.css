@@ -146,6 +146,10 @@
     text-align: center;
     padding-top: 15px;
     display:none;
+    /* margin: 0px;
+    padding:0px;
+    line-height: 0; */
+
 }
 
 #destinationsearch {
@@ -163,10 +167,10 @@
     top: 70px;
     z-index: 1000000;
     position: absolute;
-    /* background-color: #d3d3d3; */
+    background-color: #d3d3d3;
     height: 40px;
     width:160px;
-    opacity: 60%;
+    opacity: 100%;
 }
 
 #frequentdiv {
@@ -174,13 +178,23 @@
     top: 70px;
     z-index: 1000000;
     position: absolute;
-    /* background-color: #d3d3d3; */
+    background-color: #d3d3d3;
     height: 40px;
     width:165px;
+    opacity: 60%;
 }
 
 #mostsearcheddiv{
-    /* background-color: #dddddd; */
+    background-color: #dddddd;
+    margin-top: 70px;
+    margin-left: 20px;
+    height: 400px;
+    width:320px;
+    display:none;
+}
+
+#recentsearcheddiv{
+    background-color: #dddddd;
     margin-top: 70px;
     margin-left: 20px;
     height: 400px;
@@ -193,7 +207,7 @@
     top: 540px;
     z-index: 1000000;
     position: absolute;
-    /* background-color: #d3d3d3; */
+    background-color: #d3d3d3;
     height: 40px;
     width:320px;
     opacity: 60%;

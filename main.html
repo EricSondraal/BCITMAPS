@@ -64,6 +64,7 @@
                 <div id = "historydiv">HISTORY</div>
                 <div id = "frequentdiv">FREQUENT</div>
                 <div id = "mostsearcheddiv"></div>
+                <div id = "recentsearcheddiv"></div>
                 <div id  = "clearsearchdiv">CLEAR SEARCH</div>
             </div>
 
@@ -224,8 +225,8 @@
                 $('.bottomfooter').html("Hey " + name + "!");
                 
                 
-                getSearchInformation();
-                sortSearchArrays();
+                // getSearchInformation();
+                //sortFrequentSearchArrays();
                 printSearchArrays();
                 }
                 setTimeout(displayTimer, 500);
@@ -251,35 +252,42 @@
             var validbuildingCode = ['1', '2', '3', '5', '9', 'b', 'e', 'g', 'h', 'i'];
             var input = document.getElementById("destinationsearch");
             input.addEventListener("keyup", function(event) {
-            if (event.keyCode === 13) {
+                if (event.keyCode === 13) {
 
-                event.preventDefault();
+                    event.preventDefault();
+                    SetSearchDestination($('#destinationsearch').val());
+                }
+            });
+
+
+            function SetSearchDestination(userinput) {
+
                 // javascript:alert($('#destinationsearch').val());
 
+                
                 var iii;
-                var userinput = $('#destinationsearch').val();
                 var foundbuilding = false;
 
                 for (iii = 0; iii < validbuilding.length; iii++) {
                     
                     // alert("[" + userinput + "]" + "[" + validbuilding[iii] + "]");
 
-                    if (userinput == validbuilding[iii]){
+                    if (userinput.trim().toLowerCase() === validbuilding[iii].toLowerCase()){
                         FindPath(staticX, staticY, validbuildingCode[iii]);
                         DrawPathFindingUpdate();
                         foundbuilding = true;
                         //$('#setdestinationdiv').css('display', 'none');
                         // alert("works wee");
-                        incSearchLocation(userinput);
+                        incSearchLocation(userinput.trim().toLowerCase());
+
+                        $('#setdestinationdiv').css("display","none");
                     }
                 }
                 if (!foundbuilding){
                     alert("This is not a valid building.");
                 }
+                
             }
-            });
-
-
 
 
 
@@ -290,6 +298,9 @@
 
             $('#currentdestination').on('mousedown', function(event) {
                 $('#setdestinationdiv').css("display", "block");
+
+                getSearchInformation();
+                // printSearchArrays();
             });
             
 
@@ -297,22 +308,6 @@
             // $('#search-button').click(function(){
             //     incSearchLocation($('#user-search-location').val());
             // });
-
-            
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
             
@@ -322,7 +317,7 @@
             var CURRENTsearchTimeStamp = [];
             
             //update their searches
-            getSearchInformation();
+            // getSearchInformation();
             
             //getSearchInformation gets all of the user's search information off of the database
             function getSearchInformation() {
@@ -394,9 +389,9 @@
                     }
                     
                     //update their searches
-                    getSearchInformation();
-                    sortSearchArrays();
-                    printSearchArrays();
+                    // getSearchInformation();
+                    //sortFrequentSearchArrays();
+                    // printSearchArrays();
                 }
 
 
@@ -404,10 +399,10 @@
             }
             
             
-            //sortSearchArrays sorts both of the search arrays
+            //sortFrequentSearchArrays sorts both of the search arrays
             //the largest number goes to index 0
             //the smallest number goes to the last index
-            function sortSearchArrays() {
+            function sortFrequentSearchArrays() {
                 var didChange=true;
                 //keep comparing them until they are in order
                 while(didChange){
@@ -434,30 +429,82 @@
                     }
                 }
             }
+
+            
+            //sortRecentSearchArrays sorts both of the search arrays
+            //the largest number goes to index 0
+            //the smallest number goes to the last index
+            function sortRecentSearchArrays() {
+                var didChange=true;
+                //keep comparing them until they are in order
+                while(didChange){
+                    didChange=false;
+                    
+                    var iii;
+                    //loop from start to end
+                    for(iii=0;iii<CURRENTsearchLocation.length-1;iii+=1) {
+                        //compare the index's next to each other
+                        if(CURRENTsearchTimeStamp[iii]<CURRENTsearchTimeStamp[iii+1]){
+                            //wrong order: swap them
+                            let tempAmount = CURRENTsearchAmount[iii];
+                            let tempLocation = CURRENTsearchLocation[iii];
+                            let tempTimeStamp = CURRENTsearchTimeStamp[iii];
+                            
+                            CURRENTsearchAmount[iii]=CURRENTsearchAmount[iii+1];
+                            CURRENTsearchLocation[iii]=CURRENTsearchLocation[iii+1];
+                            CURRENTsearchTimeStamp[iii]=CURRENTsearchTimeStamp[iii+1];
+                            CURRENTsearchAmount[iii+1]=tempAmount;
+                            CURRENTsearchLocation[iii+1]=tempLocation;
+                            CURRENTsearchTimeStamp[iii+1]=tempTimeStamp;
+                            didChange=true;
+                        }
+                    }
+                }
+            }
             
             //print out all of the users searches to the debug window
             function printSearchArrays() {
                 var iii;
-                //var writeString="";
-                //$('#debugDiv').html("");
-                //loop from start to end
+
+                sortFrequentSearchArrays();
                 $("#mostsearcheddiv").empty();
                 for(iii=0;iii<CURRENTsearchLocation.length;iii+=1) {
-                    //$('#debugDiv').html($('#debugDiv').html()+"Location: "+CURRENTsearchLocation[iii]+"<br>"+"Frequency:"+CURRENTsearchAmount[iii]+"<br>");
-                    //writeString+="Location: "+CURRENTsearchLocation[iii]+"<br>"+"Frequency:"+CURRENTsearchAmount[iii]+"<br>";
-                    //mostsearcheddiv
                     $( "#mostsearcheddiv").append('<div class="searchhistorydiv">'+CURRENTsearchLocation[iii]+'</div>');
-                    
                 }
-                //$('#debugDiv').html(writeString);
-                
+               
+                sortRecentSearchArrays();
+                $("#recentsearcheddiv").empty();
+                for(iii=0;iii<CURRENTsearchLocation.length;iii+=1) {
+                    //alert(iii);
+                    $( "#recentsearcheddiv").append('<div class="searchhistorydiv">'+CURRENTsearchLocation[iii]+'</div>');
+                }
+                //alert("made to the end");
             }
             
-            
+            $(document).on('click','.searchhistorydiv',function(event){
+                //alert();
+                SetSearchDestination($(event.target).text())
+            });
 
 
 
+            $(document).on('click','#historydiv',function(event){
+                //alert();
+                $('#historydiv').css("opacity","100%");
+                $('#recentsearcheddiv').css("display","block");
 
+                $('#frequentdiv').css("opacity","60%");
+                $('#mostsearcheddiv').css("display","none");
+            });
+
+            $(document).on('click','#frequentdiv',function(event){
+                //alert();
+                $('#historydiv').css("opacity","60%");
+                $('#recentsearcheddiv').css("display","none");
+
+                $('#frequentdiv').css("opacity","100%");
+                $('#mostsearcheddiv').css("display","block");
+            });
 
 
 
