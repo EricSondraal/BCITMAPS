@@ -21,7 +21,7 @@
         
         <link rel="stylesheet" href="mainstyles.css">
 
-		<script>
+		<!-- <script>
 		  // Your web app's Firebase configuration
 		  var firebaseConfig = {
 			apiKey: "AIzaSyCpjvd1ZUJyO0MU1nhD39w9AWF2b8UtemY",
@@ -35,7 +35,23 @@
 		  // Initialize Firebase
 		  firebase.initializeApp(firebaseConfig);
             var db = firebase.firestore();
-		</script>
+        </script> -->
+        
+        <script>
+                // Your web app's Firebase configuration
+                var firebaseConfig = {
+                  apiKey: "AIzaSyDWnNNE7A2vwuSvoi0U7Zl1TegEyMlmbag",
+                  authDomain: "bcit-map-2.firebaseapp.com",
+                  databaseURL: "https://bcit-map-2.firebaseio.com",
+                  projectId: "bcit-map-2",
+                  storageBucket: "bcit-map-2.appspot.com",
+                  messagingSenderId: "978048692765",
+                  appId: "1:978048692765:web:9e39a5f1f529415ddd0cf4"
+                };
+                // Initialize Firebase
+                firebase.initializeApp(firebaseConfig);
+                var db = firebase.firestore();
+              </script>
         
         
         <!-- Bootstrap for Mobile-first, and JQuery -->
@@ -76,10 +92,10 @@
                 <!-- </div> -->
 
                
-                <input type="image" id ="zoominbutton" src="https://dummyimage.com/50x50/B6D06B&text=&plus;/"
+                <input type="image" id ="zoominbutton" src="plus_icon.png"
                 style="border-radius: 50%;" onclick="ZoomIn()">
 
-                <input type="image" id ="zoomoutbutton" src="https://dummyimage.com/50x50/B6D06B&text=&#43;;" 
+                <input type="image" id ="zoomoutbutton" src="minus_icon.png" 
                 style="border-radius: 50%;" onclick="ZoomOut()">
 
                     <!-- <button onclick="ZoomIn()" id="zoominbutton">+</button> -->
