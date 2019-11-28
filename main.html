@@ -218,8 +218,9 @@
 
                 $('.bottomfooter').html("Hey " + name + "!");
                 }
-                
+                getSearchInformation();
                 setTimeout(displayTimer, 500);
+                
 
             }
             
@@ -237,7 +238,7 @@
             //g = se10
             //h = se14
             //i = se16
-            var validbuilding = ["sw1", 'sw2', 'sw3', 'sw5', 'sw9', 'se2', 'se12', 'se10', 'se14', 'se16'];
+            var validbuilding = ['sw1', 'sw2', 'sw3', 'sw5', 'sw9', 'se2', 'se12', 'se10', 'se14', 'se16'];
             var validbuildingCode = ['1', '2', '3', '5', '9', 'b', 'e', 'g', 'h', 'i'];
             var input = document.getElementById("destinationsearch");
             input.addEventListener("keyup", function(event) {
@@ -258,8 +259,9 @@
                         FindPath(staticX, staticY, validbuildingCode[iii]);
                         DrawPathFindingUpdate();
                         foundbuilding = true;
-                        $('#setdestinationdiv').css('display', 'none');
+                        //$('#setdestinationdiv').css('display', 'none');
                         // alert("works wee");
+                        incSearchLocation(userinput);
                     }
                 }
                 if (!foundbuilding){
@@ -277,15 +279,33 @@
             });
 
 
-
+            $('#currentdestination').on('mousedown', function(event) {
+                $('#setdestinationdiv').css("display", "block");
+            });
             
 
             //when the search button is clicked
-            $('#search-button').click(function(){
-                incSearchLocation($('#user-search-location').val());
-            });
+            // $('#search-button').click(function(){
+            //     incSearchLocation($('#user-search-location').val());
+            // });
 
             
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             
             //arrays to keep track of the users searches
             var CURRENTsearchLocation = [];
@@ -296,20 +316,28 @@
             
             //getSearchInformation gets all of the user's search information off of the database
             function getSearchInformation() {
-                db.collection("search_location") // add to this nesting if needed
-                .get()                  // getting a collection of documents
-                .then(function(snap){
-                    // console.log(snap); // collection of documents
-                    var iii=0;
-                    snap.forEach(function(doc){ // iterate thru collections
-                        // console.log(doc)
-                        CURRENTsearchLocation[iii] = doc.data().location;
-                        CURRENTsearchAmount[iii] = doc.data().amount;
-                        iii+=1;
-                     });
-                    //console.log(CURRENTsearchLocation);
-                    //console.log(CURRENTsearchAmount);
-                });
+                var user = firebase.auth().currentUser;
+                
+                if( user != null){
+                    //$("#mapposition").html(user.uid);
+                
+
+
+                    db.collection(user.uid) // add to this nesting if needed
+                    .get()                  // getting a collection of documents
+                    .then(function(snap){
+                        // console.log(snap); // collection of documents
+                        var iii=0;
+                        snap.forEach(function(doc){ // iterate thru collections
+                            // console.log(doc)
+                            CURRENTsearchLocation[iii] = doc.data().location;
+                            CURRENTsearchAmount[iii] = doc.data().amount;
+                            iii+=1;
+                        });
+                        //console.log(CURRENTsearchLocation);
+                        //console.log(CURRENTsearchAmount);
+                    });
+                }
             }
 
             
@@ -319,35 +347,43 @@
                 var iii;
                 
                 
-                //loop through all of the user's searches
-                var loopFoundLocation=false;
-                for(iii=0; iii<CURRENTsearchLocation.length; iii+=1) {
-                    //check if they have searched this location before
-                    if(CURRENTsearchLocation[iii]==building){
-                        //if they have increase the search's frequency by 1
+
+                var user = firebase.auth().currentUser;
+                
+                if( user != null){
+                    //loop through all of the user's searches
+                    var loopFoundLocation=false;
+                    for(iii=0; iii<CURRENTsearchLocation.length; iii+=1) {
+                        //check if they have searched this location before
+                        if(CURRENTsearchLocation[iii]==building){
+                            //if they have increase the search's frequency by 1
+                            var docData = {
+                                location: CURRENTsearchLocation[iii],
+                                amount: (CURRENTsearchAmount[iii]+1)
+                            };
+                            db.collection(user.uid).doc(CURRENTsearchLocation[iii]).set(docData);
+                            
+                            loopFoundLocation=true;
+                        } 
+                    }
+                    
+                    //the user has never searched this place before... keep track of it
+                    if(!loopFoundLocation){
                         var docData = {
-                            location: CURRENTsearchLocation[iii],
-                            amount: (CURRENTsearchAmount[iii]+1)
+                            location: building,
+                            amount: (1)
                         };
-                        db.collection("search_location").doc(CURRENTsearchLocation[iii]).set(docData);
-                        
-                        loopFoundLocation=true;
-                    } 
+                        db.collection(user.uid).doc(building).set(docData);
+                    }
+                    
+                    //update their searches
+                    getSearchInformation();
+                    sortSearchArrays();
+                    printSearchArrays();
                 }
-                
-                //the user has never searched this place before... keep track of it
-                if(!loopFoundLocation){
-                    var docData = {
-                        location: building,
-                        amount: (0)
-                    };
-                    db.collection("search_location").doc(building).set(docData);
-                }
-                
-                //update their searches
-                getSearchInformation();
-                sortSearchArrays();
-                printSearchArrays();
+
+
+
             }
             
             
@@ -395,6 +431,22 @@
             }
             
             
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             
             
             
