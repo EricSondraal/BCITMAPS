@@ -70,8 +70,6 @@
     top: 0px;
 }
 
-
-
 .search-group{
     position: absolute;
     left: 100px;
@@ -142,11 +140,12 @@
     left: 1px;
     top: 0px;
     position: absolute;
-    background-color: white;
+    background-color:white;
     width: 360px;
     height: 640px;  
     text-align: center;
     padding-top: 15px;
+    display:none;
 }
 
 #destinationsearch {
@@ -154,23 +153,55 @@
 }
 
 #currentlocation {
-
     color: grey;
-    background-color: red;
+    /* background-color: red; */
     width: 240px;
 }
 
+#historydiv {
+    left: 20px;
+    top: 70px;
+    z-index: 1000000;
+    position: absolute;
+    /* background-color: #d3d3d3; */
+    height: 40px;
+    width:160px;
+    opacity: 60%;
+}
+
+#frequentdiv {
+    left: 175px;
+    top: 70px;
+    z-index: 1000000;
+    position: absolute;
+    /* background-color: #d3d3d3; */
+    height: 40px;
+    width:165px;
+}
+
 #mostsearcheddiv{
-    background-color: #dddddd;
-    margin-top: 10px;
+    /* background-color: #dddddd; */
+    margin-top: 70px;
     margin-left: 20px;
-    height: 500px;
+    height: 400px;
     width:320px;
+}
+
+
+#clearsearchdiv {
+    left: 20px;
+    top: 540px;
+    z-index: 1000000;
+    position: absolute;
+    /* background-color: #d3d3d3; */
+    height: 40px;
+    width:320px;
+    opacity: 60%;
 }
 
 #currentdestination {
     color: grey;
-    background-color: red;
+    /* background-color: red; */
     width: 240px;
 }
 
