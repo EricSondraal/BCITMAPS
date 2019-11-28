@@ -61,7 +61,9 @@
 
             <div id = "setdestinationdiv">
                 <input id = "destinationsearch" type="text" placeholder="DESTINATION">
+                <div id="mostsearcheddiv">
 
+                </div>
             </div>
             
             <!-- <div id="topBar"> -->
@@ -217,8 +219,12 @@
                 uid = user.uid;
 
                 $('.bottomfooter').html("Hey " + name + "!");
-                }
+                
+                
                 getSearchInformation();
+                sortSearchArrays();
+                printSearchArrays();
+                }
                 setTimeout(displayTimer, 500);
                 
 
@@ -310,6 +316,7 @@
             //arrays to keep track of the users searches
             var CURRENTsearchLocation = [];
             var CURRENTsearchAmount = [];
+            var CURRENTsearchTimeStamp = [];
             
             //update their searches
             getSearchInformation();
@@ -332,6 +339,7 @@
                             // console.log(doc)
                             CURRENTsearchLocation[iii] = doc.data().location;
                             CURRENTsearchAmount[iii] = doc.data().amount;
+                            CURRENTsearchTimeStamp[iii] = doc.data().timeStamp;
                             iii+=1;
                         });
                         //console.log(CURRENTsearchLocation);
@@ -351,6 +359,10 @@
                 var user = firebase.auth().currentUser;
                 
                 if( user != null){
+                    var curDate = new Date();
+                    var curTime = curDate.getTime();
+
+
                     //loop through all of the user's searches
                     var loopFoundLocation=false;
                     for(iii=0; iii<CURRENTsearchLocation.length; iii+=1) {
@@ -359,7 +371,8 @@
                             //if they have increase the search's frequency by 1
                             var docData = {
                                 location: CURRENTsearchLocation[iii],
-                                amount: (CURRENTsearchAmount[iii]+1)
+                                amount: (CURRENTsearchAmount[iii]+1),
+                                timeStamp: curTime
                             };
                             db.collection(user.uid).doc(CURRENTsearchLocation[iii]).set(docData);
                             
@@ -371,7 +384,8 @@
                     if(!loopFoundLocation){
                         var docData = {
                             location: building,
-                            amount: (1)
+                            amount: (1),
+                            timeStamp: curTime
                         };
                         db.collection(user.uid).doc(building).set(docData);
                     }
@@ -404,11 +418,14 @@
                             //wrong order: swap them
                             let tempAmount = CURRENTsearchAmount[iii];
                             let tempLocation = CURRENTsearchLocation[iii];
+                            let tempTimeStamp = CURRENTsearchTimeStamp[iii];
                             
                             CURRENTsearchAmount[iii]=CURRENTsearchAmount[iii+1];
                             CURRENTsearchLocation[iii]=CURRENTsearchLocation[iii+1];
+                            CURRENTsearchTimeStamp[iii]=CURRENTsearchTimeStamp[iii+1];
                             CURRENTsearchAmount[iii+1]=tempAmount;
                             CURRENTsearchLocation[iii+1]=tempLocation;
+                            CURRENTsearchTimeStamp[iii+1]=tempTimeStamp;
                             didChange=true;
                         }
                     }
@@ -418,15 +435,18 @@
             //print out all of the users searches to the debug window
             function printSearchArrays() {
                 var iii;
-                var writeString="";
+                //var writeString="";
                 //$('#debugDiv').html("");
                 //loop from start to end
-                
+                $("#mostsearcheddiv").empty();
                 for(iii=0;iii<CURRENTsearchLocation.length;iii+=1) {
                     //$('#debugDiv').html($('#debugDiv').html()+"Location: "+CURRENTsearchLocation[iii]+"<br>"+"Frequency:"+CURRENTsearchAmount[iii]+"<br>");
-                    writeString+="Location: "+CURRENTsearchLocation[iii]+"<br>"+"Frequency:"+CURRENTsearchAmount[iii]+"<br>";
+                    //writeString+="Location: "+CURRENTsearchLocation[iii]+"<br>"+"Frequency:"+CURRENTsearchAmount[iii]+"<br>";
+                    //mostsearcheddiv
+                    $( "#mostsearcheddiv").append('<div class="searchhistorydiv">'+CURRENTsearchLocation[iii]+'</div>');
+                    
                 }
-                $('#debugDiv').html(writeString);
+                //$('#debugDiv').html(writeString);
                 
             }
             

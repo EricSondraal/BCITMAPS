@@ -160,7 +160,13 @@
     width: 240px;
 }
 
-
+#mostsearcheddiv{
+    background-color: #dddddd;
+    margin-top: 10px;
+    margin-left: 20px;
+    height: 500px;
+    width:320px;
+}
 
 #currentdestination {
     color: grey;
