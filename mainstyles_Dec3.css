@@ -110,12 +110,12 @@
   }
 
 .bottomfooter {
-    width: 100%;
-    height: 11%;
+    width: 360px;
+    height: 40px;
     position: absolute;
     z-index: 10000;
-    left: 0%;
-    top: 94%;
+    left: 1px;
+    top: 600px;
     background-color: #B6D06B;
     opacity: 80%;
     text-align: center;
@@ -125,13 +125,13 @@
 
 #setlocationdiv {
     z-index: 100000;
-    left: 0%;
-    top: 0%;
+    left: 1px;
+    top: 0px;
     position: absolute;
     background-color: black;
     opacity: 50%;
-    width: 100%;
-    height: 100%;   
+    width: 360px;
+    height: 640px;  
     color: white;
     text-align: center;
     padding-top: 270px;
@@ -140,15 +140,14 @@
 
 #setdestinationdiv {
     z-index: 100000;
-    left: 0%;
-    /* top: 0%; */
+    left: 1px;
+    top: 0px;
     position: absolute;
     background-color:white;
     width: 100%;
     height: 100%;  
     text-align: center;
-    /* padding-top: 5%; */
-    /* top:5%; */
+    padding-top: 15px;
     display:none;
     /* margin: 0px;
     padding:0px;
@@ -157,61 +156,52 @@
 }
 
 #destinationsearch {
-    margin-top:15px; 
-    width: 69%;
+    width: 250px;
 }
 
 #currentlocation {
     color: grey;
     /* background-color: red; */
-    width: 95%;
+    width: 240px;
 }
 
 #historydiv {
-    left: 5.6%;
-    top: 11%;
+    left: 20px;
+    top: 70px;
     z-index: 1000000;
     position: absolute;
     background-color: #d3d3d3;
-    height: 6.3%;
-    width:44%;
+    height: 40px;
+    width:160px;
     opacity: 100%;
 }
 
 #frequentdiv {
-    left: 51%;
-    top: 11%;
+    left: 175px;
+    top: 70px;
     z-index: 1000000;
     position: absolute;
     background-color: #d3d3d3;
-    height: 6.3%;
-    width:43.5%;
+    height: 40px;
+    width:165px;
     opacity: 60%;
 }
 
 #mostsearcheddiv{
     background-color: #dddddd;
-    /* margin-top: 70px;
-    margin-left: 20px; */
-    height: 62.5%;
-    width: 88.9%;
+    margin-top: 70px;
+    margin-left: 20px;
+    height: 400px;
+    width:320px;
     display:none;
-    position: absolute;
-    left:5.6%;
-    top:18%;
-    z-index: 1100000;
 }
 
 #recentsearcheddiv{
     background-color: #dddddd;
-    /* margin-top: 70px;
-    margin-left: 20px; */
-    height: 62.5%;
-    width: 88.9%;
-    position: absolute;
-    left:5.6%;
-    top:18%;
-    z-index: 1100000;
+    margin-top: 70px;
+    margin-left: 20px;
+    height: 400px;
+    width:320px;
 }
 
 
@@ -229,17 +219,17 @@
 #currentdestination {
     color: grey;
     /* background-color: red; */
-    width: 95%;
+    width: 240px;
 }
 
 .searchcontainer{
     background-color: white;
-    width: 83.3%;
+    width: 300px;
     border-radius: 15px;
     position: absolute;
     z-index: 10000;
-    left: 8.3%;
-    top: 4.7%;
+    left: 30px;
+    top: 30px;
     text-align: center;
     box-shadow:  2px 2px 5px 0px rgba(0,0,0,0.43);
 }
@@ -249,11 +239,11 @@
 }
 
 #line{
-    width: 78%;
+    width: 220px;
     height: 2px;
     background-color: #d3d3d3;
     position: absolute;
-    left: 14%;
+    left: 50px;
     top:25px;
 }
 
@@ -276,8 +266,8 @@
 
 #map-container {
 	display: block;
-	height: 100%;
-	width: 100%;
+	height: 640px;
+	width: 360px;
 	overflow: hidden;
 	cursor: move;
     
