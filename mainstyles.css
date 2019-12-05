@@ -111,7 +111,7 @@
 
 .bottomfooter {
     width: 100%;
-    height: 11%;
+    height: 6.5%;
     position: absolute;
     z-index: 10000;
     left: 0%;
@@ -154,6 +154,19 @@
     padding:0px;
     line-height: 0; */
 
+}
+
+#backIcon {
+    background-image: url('back_icon.jpg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 12%;
+    height: 12%;
+    /* background-color: red; */
+    /* display: inline-block; */
+    position: absolute;
+    top: 1.5%;
+    left: 2%;
 }
 
 #destinationsearch {
@@ -273,6 +286,14 @@
     display:inline-block;
 } */
 
+html {
+    width: 100%;
+    height: 100%;
+}
+body {
+    width: 100%;
+    height: 100%;
+}
 
 #map-container {
 	display: block;

@@ -66,7 +66,14 @@
 	</head>
 	<body>
         
-
+        <div style="display:none;">
+                <img id="img_current_location"
+                src="current_location_icon.jpg"
+                width="40" height="40">
+                <img id="img_destination_location"
+                src="destination_icon.png"
+                width="40" height="40">
+        </div>
         
         <div id="phone" class="closeLogin" style="width: 100%; height: 100%; background-color: #B6D06B">
         <!-- <div id="phone" class="closeLogin" style="width: 360px; height: 640px; background-color: #B6D06B"> -->
@@ -76,6 +83,8 @@
             </div>
 
             <div id = "setdestinationdiv">
+                
+                <div id = "backIcon"></div>
                 <input id = "destinationsearch" type="text" placeholder="DESTINATION">
                 <div id = "historydiv">HISTORY</div>
                 <div id = "frequentdiv">FREQUENT</div>
@@ -247,7 +256,6 @@
                 }
                 setTimeout(displayTimer, 500);
                 
-
             }
             
             displayTimer();
@@ -324,6 +332,16 @@
             // $('#search-button').click(function(){
             //     incSearchLocation($('#user-search-location').val());
             // });
+
+
+            $('#backIcon').on('mousedown', function(event) {
+                $('#setdestinationdiv').css("display", "none");
+            });
+
+
+
+
+
 
 
             
@@ -531,11 +549,6 @@
 
 
 
-
-
-            
-            
-            
             
             ///////////////////////////////////////////////////////////////////////////////
             //DRAGGING AROUND THE IMAGE
@@ -548,7 +561,7 @@
             var _CONTAINER_HEIGHT = $("#map-container").outerHeight();
             var _CONTAINER_HEIGHT = window.innerHeight;
             //_CONTAINER_HEIGHT = 640;
-            alert("w: " + _CONTAINER_WIDTH + " h: " + _CONTAINER_HEIGHT);
+            // alert("This is the new version.");
             var _IMAGE_WIDTH;
             var _IMAGE_HEIGHT;
             var _IMAGE_LOADED = 0;
@@ -792,6 +805,7 @@
 
             //for div
             $('#setlocationdiv').on('mousedown', function(event) {
+                
                 
                 var current_mouse_position = { x: event.pageX - _DIV_OFFSET.left, y: event.pageY - _DIV_OFFSET.top };
                 var dragImageLeft = parseFloat(document.getElementById("drag-image").style.left);
@@ -1079,17 +1093,23 @@
             }
             
             
+            c = document.getElementById("myCanvas");
             
+            c.height = document.body.clientHeight;
+            c.width = document.body.clientWidth;
+
+            console.log("hight " + c.hight + " width " + c.width);
             
-            
-            
+            const image_current = document.getElementById('img_current_location');
+            const image_destination = document.getElementById('img_destination_location');
+
             var drawCounter=0;
             function DrawPathFindingUpdate(){
+
                 //get canvas info
                 var c = document.getElementById("myCanvas");
                 var ctx = c.getContext("2d");
                 var scaleAmount = 39*zoomFactor;
-                
                 
                 //get the map offset
                 var drawOffsetX = parseFloat(document.getElementById("drag-image").style.left);
@@ -1104,15 +1124,26 @@
                 ctx.beginPath();
                 var curDrawLocX = foundLocationX;
                 var curDrawLocY = foundLocationY;
+
+                //draw the end location
+                ctx.drawImage(image_destination,Math.round((curDrawLocY+0.5)*scaleAmount+drawOffsetX)-14,Math.round((curDrawLocX+0.5)*scaleAmount+drawOffsetY)-45,28,45);
+
                 ctx.moveTo(Math.round((curDrawLocY+0.5)*scaleAmount+drawOffsetX),Math.round((curDrawLocX+0.5)*scaleAmount+drawOffsetY));
                 
+                var lastDrawX=0;
+                var lastDrawY=0;
+
                 //loop until we reach the end
                 while(pathingArrayX[curDrawLocX][curDrawLocY]!=-1)
                 {
                     drawCounter+=1;
                     //draw a line to the current location
-                    ctx.lineTo( Math.round((curDrawLocY+0.5)*scaleAmount+drawOffsetX),Math.round((curDrawLocX+0.5)*scaleAmount+drawOffsetY));
+                    ctx.lineTo(Math.round((curDrawLocY+0.5)*scaleAmount+drawOffsetX),Math.round((curDrawLocX+0.5)*scaleAmount+drawOffsetY));
                     
+                    //update the last draw location used for setting the end location
+                    lastDrawX=Math.round((curDrawLocY+0.5)*scaleAmount+drawOffsetX);
+                    lastDrawY=Math.round((curDrawLocX+0.5)*scaleAmount+drawOffsetY);
+
                     //step forward one time
                     var newLocX=pathingArrayX[curDrawLocX][curDrawLocY];
                     var newLocY=pathingArrayY[curDrawLocX][curDrawLocY];
@@ -1122,6 +1153,14 @@
                 
                 //done
                 ctx.stroke();
+
+
+                //draw the start location
+                ctx.drawImage(image_current,Math.round((curDrawLocY+0.5)*scaleAmount+drawOffsetX)-20,Math.round((curDrawLocX+0.5)*scaleAmount+drawOffsetY)-20,40,40);
+
+
+
+
                 //document.getElementById("debugDiv").innerHTML=pathingArrayX[curDrawLocX][curDrawLocY]+" "+pathingArrayY[curDrawLocX][curDrawLocY];
                 //document.getElementById("debugDiv").innerHTML=drawCounter;
                 //document.getElementById("debugDiv").innerHTML=pathingArrayX[2][3]+" "+pathingArrayY[2][3];
