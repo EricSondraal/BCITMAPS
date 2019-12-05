@@ -57,13 +57,30 @@
 <body>
 
     <div id="header">
-        <h1>BCIT MAPS</h1>
-        <p>Travel anywhere. On Time.</p>
+        <div id="loginlogo"></div>
+        <div id="logoText">BCIT MAPS</div>
+        <div id="catchphrase">Travel anywhere. On Time.</div>
+    </div>
+
+    <div id="loadingdiv">
+        <img id="loadingImage" src="logo\\logo.JPG" alt="loading" >
     </div>
 
     <!-- Firebase containers that must be present on the login page -->
     <div id="firebaseui-auth-container"></div>
     <div id="loader">Loading...</div>
+
+
+
+    <script>
+      setTimeout(loadingFunction, 1000);
+      function loadingFunction() {
+        document.getElementById("loadingdiv").style.display = "none";
+      }
+    </script>
+
+
+
 
     <!-- Firebase Login Script -->
     <script>
